@@ -1,6 +1,18 @@
 ### Zebra RFID Scanner Interface (Django)
 
-A professional, production-ready web interface designed for Zebra FX7500/FX9600 fixed RFID readers. This is a **functional model** with full database persistence, allowing for long-term data storage and integration with external business systems.
+A professional, enterprise-focused web interface designed for Zebra FX7500/FX9600 fixed RFID readers. This is a **functional model** with full database persistence, allowing for long-term data storage and integration with external business systems.
+
+#### Use Cases
+Designed for inventory tracking, warehouse management, asset monitoring, and ERP systems integration.
+
+#### System Architecture
+```mermaid
+graph LR
+    Reader[Zebra Reader] -->|HTTP POST| API[Django API]
+    API -->|ORM| DB[SQL / PostgreSQL]
+    DB --> Dashboard[Tailwind Dashboard]
+    Dashboard -->|Polling| API
+```
 
 #### Key Features
 - **Real-Time Monitoring**: Live EPC tag list with antenna and RSSI metadata.
