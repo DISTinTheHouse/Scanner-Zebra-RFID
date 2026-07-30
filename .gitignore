@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Django
+db.sqlite3
+local_settings.py
+*.log
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Project specific logs (excluding the diagnostic one if desired, but usually logs are ignored)
+zebra_traffic.log
