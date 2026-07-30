@@ -6,12 +6,13 @@ A professional, enterprise-focused web interface designed for Zebra FX7500/FX960
 Designed for inventory tracking, warehouse management, asset monitoring, and ERP systems integration.
 
 #### System Architecture
+
 ```mermaid
-graph LR
-    Reader[Zebra Reader] -->|HTTP POST| API[Django API]
-    API -->|ORM| DB[SQL / PostgreSQL]
-    DB --> Dashboard[Tailwind Dashboard]
-    Dashboard -->|Polling| API
+flowchart LR
+    Reader["Zebra Reader"] -- "HTTP POST" --> API["Django API"]
+    API -- "ORM" --> DB["SQL / PostgreSQL"]
+    DB --> Dashboard["Tailwind Dashboard"]
+    Dashboard -- "Polling" --> API
 ```
 
 #### Key Features
