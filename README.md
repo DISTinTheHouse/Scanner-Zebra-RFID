@@ -14,7 +14,9 @@ A high-performance web interface designed for Zebra FX7500/FX9600 fixed RFID rea
 
 ##### 1. Prerequisites
 - Python 3.10+
-- Access to a Zebra FX series reader (or use the simulation tools).
+- Access to a Zebra FX series reader.
+- <img width="921" height="527" alt="zebra-reader-example" src="https://github.com/user-attachments/assets/0cc50048-cd36-4bca-b4e8-fcbd9173b87e" />
+
 
 ##### 2. Installation
 ```powershell
@@ -52,6 +54,15 @@ To connect a Zebra FX reader (Firmware 3.x+):
    - Click **Start** in the `Inventory > Control` menu.
 
 Detailed setup instructions are available in [SCANNER_SETUP.md](./SCANNER_SETUP.md).
+
+- <img width="1324" height="824" alt="zebra-config-example" src="https://github.com/user-attachments/assets/56e0819e-f5f9-469f-921a-942301c62a35" />
+
+Save the changes:
+<img width="1060" height="765" alt="image" src="https://github.com/user-attachments/assets/4d895505-c343-4721-9928-904720e4d5aa" />
+
+Go to "Connections" and there you go:
+<img width="1067" height="450" alt="image" src="https://github.com/user-attachments/assets/80bced88-c0b2-4afd-8eba-5e0ec36762e9" />
+
 
 ---
 
