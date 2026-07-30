@@ -1,6 +1,6 @@
-### Zebra FX7500/FX9600 Configuration Guide
+### Zebra FX-Series Configuration Guide
 
-This guide outlines the steps to connect a Zebra FX-series RFID reader to the Django interface using the IoT Connector.
+This guide outlines the steps to connect any Zebra FX-series RFID reader (FX7500, FX9600, etc.) to the Django interface. The configuration is identical across all FX models and suffixes (e.g., -4, -8).
 
 #### 1. Access the Web Interface
 - Open your browser and navigate to the reader's IP (e.g., `http://192.168.1.249`).

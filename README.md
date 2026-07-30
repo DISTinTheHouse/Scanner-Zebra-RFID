@@ -14,7 +14,8 @@ A high-performance web interface designed for Zebra FX7500/FX9600 fixed RFID rea
 
 ##### 1. Prerequisites
 - Python 3.10+
-- Access to a Zebra FX series reader.
+- Access to any Zebra FX series reader (FX7500, FX9600, etc.).
+- **Model Compatibility**: This interface is compatible with all Zebra FX-series models (e.g., FX9600-4, FX7500-4, FX9600-8). The specific model suffix does not affect functionality.
 - <img width="921" height="527" alt="zebra-reader-example" src="https://github.com/user-attachments/assets/0cc50048-cd36-4bca-b4e8-fcbd9173b87e" />
 
 
