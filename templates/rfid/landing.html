@@ -3,75 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Zebra RFID Scanner</title>
+    <title>Zebra RFID | Professional</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* Prevents text selection which can be annoying on handhelds during rapid interaction */
         body {
+            font-family: 'Inter', sans-serif;
             -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
             user-select: none;
             overscroll-behavior: none;
+            background-color: #000;
         }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .stat-card {
+            background: radial-gradient(circle at top left, rgba(255,255,255,0.03), transparent);
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .float { animation: subtle-float 4s ease-in-out infinite; }
     </style>
 </head>
-<body class="bg-slate-900 text-white font-sans flex flex-col h-screen overflow-hidden">
+<body class="text-white flex flex-col h-screen overflow-hidden selection:bg-yellow-500/30">
 
-    <!-- Header / Status Bar -->
-    <header class="bg-slate-800 p-4 border-b border-slate-700 flex justify-between items-center shrink-0">
-        <div>
-            <h1 class="text-xl font-bold tracking-tight">RFID Scanner</h1>
-            <p id="eb-status" class="text-xs text-slate-400">Scanner: 192.168.1.249</p>
+    <!-- Top Navigation -->
+    <header class="px-8 py-6 flex justify-between items-center border-b border-white/[0.08] bg-black/60 backdrop-blur-xl sticky top-0 z-50">
+        <div class="flex items-center gap-5">
+            <div class="w-11 h-11 bg-white text-black rounded-2xl flex items-center justify-center font-black text-xl shadow-[0_0_30px_rgba(255,255,255,0.15)]">
+                Z
+            </div>
+            <div>
+                <h1 class="text-sm font-extrabold tracking-[0.2em] uppercase text-white/90">RFID Edge</h1>
+                <p id="eb-status" class="text-[10px] text-white/40 font-mono mt-1 tracking-wider">192.168.1.249</p>
+            </div>
         </div>
-        <div id="rfid-status-indicator" class="flex items-center gap-2">
-            <span class="text-xs font-medium uppercase">Backend</span>
-            <div id="status-dot" class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
+        <div id="rfid-status-indicator" class="flex items-center gap-3 px-4 py-2 bg-white/[0.03] border border-white/[0.1] rounded-full shadow-inner">
+            <div id="status-dot" class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)]"></div>
+            <span class="text-[9px] font-bold tracking-[0.2em] text-white/60 uppercase">System Ready</span>
         </div>
     </header>
 
-    <!-- Main Content / Controls -->
-    <main class="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+    <!-- Content Engine -->
+    <main class="flex-1 overflow-y-auto flex flex-col max-w-3xl mx-auto w-full">
         
-        <!-- Hero Action Section -->
-        <section class="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl flex flex-col items-center justify-center text-center">
-            <div id="stats" class="mb-4 grid grid-cols-2 gap-4 w-full">
-                <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-700/50">
-                    <span class="block text-2xl font-black text-yellow-500" id="tag-count">0</span>
-                    <span class="text-[10px] uppercase text-slate-400">Tags Read</span>
-                </div>
-                <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-700/50">
-                    <span class="block text-2xl font-black text-blue-400" id="read-rate">0</span>
-                    <span class="text-[10px] uppercase text-slate-400">Tags/Sec</span>
-                </div>
+        <!-- Metrics Display -->
+        <section class="p-8 grid grid-cols-2 gap-6">
+            <div class="glass stat-card rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center transition-transform hover:scale-[1.02] duration-500">
+                <span class="text-6xl font-extralight tracking-tighter leading-none" id="tag-count">0</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30 mt-5">Cumulative Tags</span>
             </div>
+            <div class="glass stat-card rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center transition-transform hover:scale-[1.02] duration-500">
+                <span class="text-6xl font-extralight tracking-tighter leading-none text-white/60" id="read-rate">0.0</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30 mt-5">Scan Velocity</span>
+            </div>
+        </section>
 
-            <button id="scan-btn" class="w-full py-8 rounded-2xl bg-yellow-500 text-slate-900 text-2xl font-black uppercase tracking-widest active:scale-95 transition-transform shadow-lg shadow-yellow-500/20">
-                Start Scan
+        <!-- Command Center -->
+        <section class="px-8 pb-8">
+            <button id="scan-btn" class="w-full py-6 rounded-[2rem] bg-yellow-500 text-slate-900 text-xs font-black uppercase tracking-[0.3em] transition-all duration-300 hover:shadow-[0_0_60px_-15px_rgba(234,179,8,0.4)] active:scale-[0.97] border-b-4 border-yellow-700 active:border-b-0">
+                Start Monitoring
             </button>
         </section>
 
-        <!-- Results List -->
-        <section class="flex-1 flex flex-col min-h-0">
-            <div class="flex justify-between items-center mb-2 px-2">
-                <h2 class="text-xs font-bold uppercase text-slate-500 tracking-widest">Inventory List</h2>
-                <button id="clear-btn" class="text-xs font-bold text-slate-400 hover:text-white uppercase">Clear</button>
+        <!-- Data Stream -->
+        <section class="flex-1 flex flex-col min-h-0 px-8 pb-10">
+            <div class="flex justify-between items-center mb-6 px-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-1 h-4 bg-yellow-500 rounded-full"></div>
+                    <h2 class="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">Inbound Stream</h2>
+                </div>
+                <button id="clear-btn" class="text-[9px] font-bold text-white/20 hover:text-white uppercase tracking-[0.2em] transition-all hover:tracking-[0.3em]">Purge List</button>
             </div>
             
-            <div id="results-container" class="flex-1 bg-slate-800 rounded-t-2xl border-t border-x border-slate-700 overflow-y-auto">
-                <ul id="tag-list" class="divide-y divide-slate-700">
-                    <!-- Sample Tag Item (Hidden by default or replaced) -->
-                    <li class="p-4 flex flex-col gap-1 italic text-slate-500 text-sm text-center py-10" id="empty-state">
-                        Waiting for scan data...
-                    </li>
-                </ul>
+            <div id="results-container" class="flex-1 glass rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl">
+                <div class="overflow-y-auto flex-1">
+                    <ul id="tag-list" class="divide-y divide-white/[0.04]">
+                        <li class="p-24 flex flex-col items-center justify-center text-center" id="empty-state">
+                            <div class="w-16 h-16 border border-white/10 rounded-full mb-6 flex items-center justify-center float">
+                                <div class="w-1.5 h-1.5 bg-yellow-500 rounded-full shadow-[0_0_12px_rgba(234,179,8,0.8)]"></div>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-[0.4em] font-medium text-white/20">Awaiting Hardware Signal</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </section>
     </main>
 
-    <!-- Footer Information -->
-    <footer class="bg-slate-800 p-2 text-center border-t border-slate-700 shrink-0">
-        <p class="text-[10px] text-slate-500">Zebra RFID Industrial Interface v1.0</p>
+    <!-- Global Footer -->
+    <footer class="px-8 py-6 text-center border-t border-white/[0.03] bg-black/40 backdrop-blur-md">
+        <p class="text-[9px] font-bold tracking-[0.3em] uppercase text-white/10">Zebra Enterprise System &bull; Secure Deployment</p>
     </footer>
 
     <!-- Zebra Enterprise Browser JS Scaffolding -->
@@ -143,8 +176,11 @@
                     tags.clear();
                     tagCountEl.textContent = '0';
                     tagList.innerHTML = `
-                        <li class="p-4 flex flex-col gap-1 italic text-slate-500 text-sm text-center py-10" id="empty-state">
-                            Waiting for scan data...
+                        <li class="p-24 flex flex-col items-center justify-center text-center" id="empty-state">
+                            <div class="w-16 h-16 border border-white/10 rounded-full mb-6 flex items-center justify-center float">
+                                <div class="w-1.5 h-1.5 bg-yellow-500 rounded-full shadow-[0_0_12px_rgba(234,179,8,0.8)]"></div>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-[0.4em] font-medium text-white/20">Awaiting Hardware Signal</span>
                         </li>
                     `;
                 } catch (e) {
@@ -164,17 +200,20 @@
                 }
 
                 const li = document.createElement('li');
-                li.className = 'p-4 border-b border-slate-700 flex justify-between items-center animate-in fade-in slide-in-from-right-4 duration-300';
+                li.className = 'p-6 flex justify-between items-center transition-all duration-700 animate-in fade-in slide-in-from-bottom-4';
                 li.innerHTML = `
-                    <div class="flex flex-col">
-                        <span class="text-xs text-slate-500 font-mono">EPC</span>
-                        <span class="font-mono text-sm font-bold text-yellow-500">${epc}</span>
+                    <div class="flex flex-col gap-1.5">
+                        <span class="text-[9px] font-bold text-white/30 uppercase tracking-[0.2em]">Tag ID</span>
+                        <span class="font-mono text-sm font-bold text-yellow-500 tracking-tight">${epc}</span>
                         <div class="flex gap-2 mt-1">
-                            <span class="text-[8px] uppercase px-1 bg-slate-700 rounded text-slate-300">Ant: ${antenna || 1}</span>
-                            <span class="text-[8px] uppercase px-1 bg-slate-700 rounded text-slate-300">RSSI: ${rssi || 'N/A'}</span>
+                            <span class="text-[8px] font-bold uppercase px-2 py-0.5 bg-white/5 rounded-full text-white/40 border border-white/10 tracking-widest">Ant: ${antenna || 1}</span>
+                            <span class="text-[8px] font-bold uppercase px-2 py-0.5 bg-white/5 rounded-full text-white/40 border border-white/10 tracking-widest">RSSI: ${rssi || 'N/A'}</span>
                         </div>
                     </div>
-                    <span class="text-[10px] bg-green-500/20 text-green-400 px-2 py-1 rounded border border-green-500/30 font-bold">DETECTED</span>
+                    <div class="flex flex-col items-end gap-2">
+                        <span class="text-[8px] bg-green-500/10 text-green-500 px-3 py-1 rounded-full border border-green-500/20 font-black tracking-[0.2em] uppercase shadow-[0_0_15px_rgba(34,197,94,0.1)]">Captured</span>
+                        <span class="text-[8px] text-white/20 font-mono tracking-tighter">${new Date().toLocaleTimeString()}</span>
+                    </div>
                 `;
                 tagList.prepend(li);
             }
