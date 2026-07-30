@@ -66,7 +66,7 @@ Go to "Connections" and there you go:
 
 ---
 
-#### Diagnostics & Testing
+#### Diagnostics, Testing & Results 
 
 - **Live Logs**: Monitor real scanner traffic in real-time:
   ```powershell
@@ -78,6 +78,11 @@ Go to "Connections" and there you go:
   ```
 
 For more diagnostic commands, see [commands.md](./commands.md).
+
+DONE ! 
+
+<img width="734" height="891" alt="image" src="https://github.com/user-attachments/assets/57187e0e-22d8-4234-8989-45524ff6c784" />
+
 
 ---
 
