@@ -1,12 +1,40 @@
 ### Zebra RFID Scanner Interface (Django)
 
-A high-performance web interface designed for Zebra FX7500/FX9600 fixed RFID readers. This application provides real-time tag monitoring via a mobile-optimized dashboard, leveraging the Zebra IoT Connector for hardware-to-backend communication.
+A professional, production-ready web interface designed for Zebra FX7500/FX9600 fixed RFID readers. This is a **functional model** with full database persistence, allowing for long-term data storage and integration with external business systems.
 
 #### Key Features
 - **Real-Time Monitoring**: Live EPC tag list with antenna and RSSI metadata.
 - **Hardware Integration**: Optimized for Zebra's HTTP POST push mechanism (IoT Connector).
+- **Persistent Storage**: All scans are automatically saved to a database via Django ORM.
 - **Mobile-First Design**: Built with Tailwind CSS for warehouse handhelds and Zebra scanners.
 - **Diagnostic Tools**: Built-in logging and testing suite for network verification.
+
+---
+
+#### Persistence & Database Configuration
+
+This application is built on the Django framework, meaning it uses a powerful ORM (Object-Relational Mapper) to handle data. It is NOT just a visual sample; every tag read is stored in a structured database.
+
+##### 1. Default Storage (SQLite)
+By default, the project uses **SQLite** (`db.sqlite3`), which requires zero configuration and is perfect for small deployments or edge devices.
+
+##### 2. Production Databases (PostgreSQL, MySQL, SQL Server)
+Because it uses Django, you can easily switch to a professional database engine. Simply modify the `DATABASES` section in `scanner_zebra_rfid/settings.py`:
+
+```python
+# Example for PostgreSQL
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'your_db_name',
+        'USER': 'your_user',
+        'PASSWORD': 'your_password',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
+}
+```
+*Note: Ensure you install the appropriate driver (e.g., `psycopg2` for Postgres or `mysqlclient` for MySQL).*
 
 ---
 
